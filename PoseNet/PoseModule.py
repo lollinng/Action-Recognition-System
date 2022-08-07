@@ -1,6 +1,7 @@
 import cv2
 import mediapipe as mp
 import time
+import numpy as np
 import math
 
 
@@ -35,7 +36,7 @@ class poseDetector():
                                            self.mpPose.POSE_CONNECTIONS)
         return img
 
-    def findPosition(self, img,land_no,draw=True):
+    def findPosition(self, img,draw=True):
         self.lmList = []
         if self.results.pose_landmarks:
             for id, lm in enumerate(self.results.pose_landmarks.landmark):
@@ -55,8 +56,8 @@ class poseDetector():
         x3, y3 = self.lmList[p3][1:]
 
         # Calculate the Angle
-        angle = math.degrees(math.atan2(y3 - y2, x3 - x2) -
-                             math.atan2(y1 - y2, x1 - x2))
+        angle = np.abs(math.degrees(math.atan2(y3 - y2, x3 - x2) -
+                             math.atan2(y1 - y2, x1 - x2)))
         
         if angle > 180.0:
             angle = 360 - angle
